@@ -53,7 +53,7 @@ function dbPool()
 	{
 		var promise = new Promise((resolve, reject) =>
 		{
-			console.log(new Date(), connection.id);
+//			console.log(new Date(), connection.id);
 			connection.active = true;
 			connection._connection.query(queryString, bindingParameters).then((result) => {
 				connection.active = false;
@@ -108,7 +108,6 @@ function dbPool()
 		conStr += ";SSLServerCertificate=" + __basedir + "certificates/" + json.sslCert;
 		conStr += ";" + json.other;
 
-		console.log(conStr);
 		return conStr;
 	}
 }
