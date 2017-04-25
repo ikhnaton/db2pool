@@ -88,9 +88,11 @@ function dbPool()
 	{
 		if (pool[dbName] == null)
 		{
+			var config = require(__basedir + 'credentials/' + dbName + '.json');
+
 			pool[dbName] = {
 				counter: 0,
-				maxPoolSize: 10,
+				maxPoolSize: (config.maxPoolSize != null)?config.maxPoolSize:10,
 				connections: []
 			}
 		}
@@ -106,7 +108,7 @@ function dbPool()
 		conStr += ";PROTOCOL=" + json.protocol;
 		conStr += ";Security=" + json.security;
 		conStr += ";SSLServerCertificate=" + __basedir + "certificates/" + json.sslCert;
-		conStr += ";" + json.other;
+		conStr += (json.other != null)?";" + json.other:"";
 
 		return conStr;
 	}

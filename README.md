@@ -10,6 +10,7 @@ To use this, you will need to create a **/credentials/** folder in the base of y
 	"protocol": "TCPIP",
 	"security": "SSL",
 	"sslCert": "your ssl cert.pem",
+	"maxPoolSize": size,
 	"other": ""
 }
 ```
