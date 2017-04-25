@@ -108,7 +108,7 @@ function dbPool()
 		conStr += ";PROTOCOL=" + json.protocol;
 		conStr += ";Security=" + json.security;
 		conStr += ";SSLServerCertificate=" + __basedir + "certificates/" + json.sslCert;
-		conStr += ";" + json.other;
+		conStr += (json.other != null)?";" + json.other:"";
 
 		return conStr;
 	}
