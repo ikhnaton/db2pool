@@ -1,0 +1,25 @@
+{
+	"name": "db2pool",
+	"version": "0.0.1",
+	"description": "Basic connection pool wrapper for ibm db2 node.js driver.",
+	"main": "dbPool.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "ikhnaton <ikhnaton@techie.com>",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ikhnaton/db2pool.git"
+	},
+	"license": "ISC",
+	"keywords": [
+		"db2",
+		"connection",
+		"pool",
+		"ibm"
+	],
+	"dependencies": {
+		"ibm_db": "^2.0.0",
+		"lodash": "^4.17.4"
+	}
+}
