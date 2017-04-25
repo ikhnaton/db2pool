@@ -88,9 +88,11 @@ function dbPool()
 	{
 		if (pool[dbName] == null)
 		{
+			var config = require(__basedir + 'credentials/' + dbName + '.json');
+
 			pool[dbName] = {
 				counter: 0,
-				maxPoolSize: 10,
+				maxPoolSize: (config.maxPoolSize != null)?config.maxPoolSize:10,
 				connections: []
 			}
 		}
