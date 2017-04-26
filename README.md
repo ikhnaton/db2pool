@@ -1,4 +1,4 @@
-To use this, you will need to create a **/credentials/** folder in the base of your project.  It will contain the necessary credentials to connect to a db2 database.  for example, for the HPD database used in this demo:
+To use this, you will need to create a **/credentials/** folder in the base of your project.  It will contain the necessary credentials to connect to a db2 database.  for example:
 
 ```
 {
