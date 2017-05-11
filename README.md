@@ -1,4 +1,10 @@
-To use this, you will need to create a **/credentials/** folder in the base of your project.  It will contain the necessary credentials to connect to a db2 database.  for example:
+### Installation
+
+Install from npm using:
+
+`npm install db2pool --save`
+
+In addition, to use this, you will need to create a **/credentials/** folder in the base of your project.  It will contain the necessary credentials to connect to a db2 database.  for example:
 
 ```
 {
@@ -19,13 +25,37 @@ Also, the package expects the global variable `__basedir` to be defined to conta
 
 This connection pool makes use of the `ibm_db` framework which utilizes the IBM DB2 ODBC driver under the covers.  While ODBC may not be the db connectivity method of choice, it is fully functional and works.  This is coded in such a fashion that if IBM releases an official DB2 driver for Node.js in the future, it would be relatively easy to swap in to replace the `ibm_db` framework.
 
-###Usage
+### Usage
 
-####getConnection(dbname) - obtain database connection from the pool
+Instatiate your pool as follows:
+
+`const pool = require('db2pool');`
+
+#### getConnection(dbname) - obtain database connection from the pool
+
+```
+pool.getConnection(dbname)
+	.then((connection) => {
+		//use connection to access the db
+	})
+	.catch((failure) -> {
+		console.log(failure);
+	})
+```
 
 **returns** - ES6 Promise that resolves to a connection object or an error
 
-####query(connection, query string, query parameters)
+#### query(connection, query string, query parameters)
+
+```
+pool.query(connection, "SELECT * FROM DB WHERE ABC = ?", ["value'"])
+	.then((result) => {
+		// do something with the query result
+	})
+	.catch((failure) => {
+		console.log(failure);
+	})
+```
 
 connection = connection obtain earlier from getConnection
 
