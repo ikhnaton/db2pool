@@ -12,7 +12,7 @@ In addition, to use this, you will need to create a **/credentials/** folder in 
 	"hostname": "db2.server.hostname.com",
 	"username": "<userid>",
 	"password": "<password>",
-	"port": 50602,
+	"port": 50100,
 	"protocol": "TCPIP",
 	"security": "SSL",
 	"sslCert": "your ssl cert.pem",
@@ -22,6 +22,41 @@ In addition, to use this, you will need to create a **/credentials/** folder in 
 ```
 
 Also, the package expects the global variable `__basedir` to be defined to contain the base path of your project.
+
+Alternatively, the necessary credentials to connect to db2 databases can be stored as a JSON string in the environment variable DBPOOL.  for example:
+
+```
+#!/bin/bash
+DBPOOL='
+{
+        "dbname": {
+                "database": "dbname",
+                "hostname": "db2.server.hostname.com",
+                "username": "<userid>",
+                "password": "<password>",
+                "port": 50100,
+                "protocol": "TCPIP",
+                "security": "SSL",
+                "sslCert": "your ssl cert.pem",
+                "maxPoolSize": size,
+                "other": ""
+        },
+        "dbname": {
+                "database": "dbname",
+                "hostname": "db2.server.hostname.com",
+                "username": "<userid>",
+                "password": "<password>",
+                "port": 50100,
+                "protocol": "TCPIP",
+                "security": "SSL",
+                "sslCert": "your ssl cert.pem",
+                "maxPoolSize": size,
+                "other": ""
+        }
+}
+'
+export DBPOOL
+```
 
 This connection pool makes use of the `ibm_db` framework which utilizes the IBM DB2 ODBC driver under the covers.  While ODBC may not be the db connectivity method of choice, it is fully functional and works.  This is coded in such a fashion that if IBM releases an official DB2 driver for Node.js in the future, it would be relatively easy to swap in to replace the `ibm_db` framework.
 
@@ -57,11 +92,11 @@ pool.query(connection, "SELECT * FROM DB WHERE ABC = ?", ["value'"])
 	})
 ```
 
-connection = connection obtain earlier from getConnection
+connection = connection obtained earlier from getConnection
 
 query string = SQL query to run on DB2
 
-query parameters = values that will be substitute by the the driver into the query ?'s
+query parameters = values that will be substituted by the the driver into the query ?'s
 
 **returns** - ES6 Promise that resolves to the results of a query or and error
 
