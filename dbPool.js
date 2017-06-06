@@ -15,7 +15,7 @@ function dbPool()
 
 			if ((available == -1) && (pool[dbName].connections.length < pool[dbName].maxPoolSize))
 			{
-				var config = require(__basedir + 'credentials/' + dbName + '.json');
+				var config = (process.env.DBPOOL != null)?JSON.parse(process.env.DBPOOL)[dbName]:require(__basedir + 'credentials/' + dbName + '.json');
 
 				ibmdb.open(_buildConectionString(config), function (err, conn)
 				{
@@ -88,13 +88,24 @@ function dbPool()
 	{
 		if (pool[dbName] == null)
 		{
-			var config = require(__basedir + 'credentials/' + dbName + '.json');
-
 			pool[dbName] = {
 				counter: 0,
-				maxPoolSize: (config.maxPoolSize != null)?config.maxPoolSize:10,
 				connections: []
+			};
+
+			if (process.env.DBPOOL)
+			{
+				let config = JSON.parse(process.env.DBPOOL);
+
+				pool[dbName].maxPoolSize = (config[dbName].maxPoolSize != null)?config[dbName].maxPoolSize:10;
 			}
+			else
+			{
+				let config = require(__basedir + 'credentials/' + dbName + '.json');
+
+				pool[dbName].maxPoolSize = (config.maxPoolSize != null)?config.maxPoolSize:10;
+			}
+
 		}
 	}
 

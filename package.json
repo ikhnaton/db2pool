@@ -1,6 +1,6 @@
 {
 	"name": "db2pool",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"description": "Basic connection pool wrapper for ibm db2 node.js driver.",
 	"main": "dbPool.js",
 	"scripts": {
