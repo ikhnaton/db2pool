@@ -10,24 +10,30 @@ function dbPool()
 	{
 		var promise = new Promise((resolve, reject) =>
 		{
-			mi.init(dbName);
-			var available = _.findIndex(pool[dbName].connections, { active: false });
+			mi.init(dbName)
+				.then(connections => {
+					var available = _.findIndex(pool[dbName].connections, { active: false });
 
-			if ((available == -1) && (pool[dbName].connections.length < pool[dbName].maxPoolSize))
-			{
-				resolve(addNewConnection(dbName));
-			}
-			else if (available == -1)
-			{
-				// all connections are in use, start stacking.
-				var x = Math.floor(Math.random() * pool[dbName].maxPoolSize);
+					if ((available == -1) && (pool[dbName].connections.length < pool[dbName].maxPoolSize))
+					{
+						resolve(addNewConnection(dbName));
+					}
+					else if (available == -1)
+					{
+						// all connections are in use, start stacking.
+						var x = Math.floor(Math.random() * pool[dbName].maxPoolSize);
 
-				resolve(pool[dbName].connections[x]);
-			}
-			else
-			{
-				resolve(pool[dbName].connections[available]);
-			}
+						resolve(pool[dbName].connections[x]);
+					}
+					else
+					{
+						resolve(pool[dbName].connections[available]);
+					}
+				})
+				.catch(error => {
+					console.log(error);
+					reject(error);
+				});
 		});
 
 		return promise;
@@ -163,7 +169,6 @@ function dbPool()
 			{
 				if (err)
 				{
-					console.log(err);
 					reject(err);
 				}
 				else
