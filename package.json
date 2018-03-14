@@ -1,6 +1,6 @@
 {
 	"name": "db2pool",
-	"version": "0.0.9",
+	"version": "0.0.11",
 	"description": "Basic connection pool wrapper for ibm db2 node.js driver.",
 	"main": "dbPool.js",
 	"scripts": {
@@ -19,7 +19,7 @@
 		"ibm"
 	],
 	"dependencies": {
-		"ibm_db": "^2.0.0",
+		"ibm_db": "^2.2.1",
 		"lodash": "^4.17.4"
 	}
 }

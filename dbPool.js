@@ -1,10 +1,11 @@
 const _ = require('lodash');
-const ibmdb = require('ibm_db');
 
 function dbPool()
 {
 	var pool = {};
 	var mi = this;
+	this._ibmdb = require('ibm_db');
+	this.lock = false;
 
 	this.getConnection = function(dbName)
 	{
@@ -161,26 +162,46 @@ function dbPool()
 
 	function addNewConnection(dbName)
 	{
-		let promise = new Promise((resolve, reject) =>
+		if (this.lock === true)
 		{
-			var config = (process.env.DBPOOL != null)?JSON.parse(process.env.DBPOOL)[dbName]:require(__basedir + 'credentials/' + dbName + '.json');
-
-			ibmdb.open(_buildConectionString(config), function (err, conn)
-			{
-				if (err)
-				{
-					reject(err);
-				}
-				else
-				{
-					pool[dbName].counter++;
-					pool[dbName].connections.push({ _connection: conn, active: false, id: pool[dbName].counter });
-					var dex = _.findIndex(pool[dbName].connections, { id: pool[dbName].counter });
-					resolve(pool[dbName].connections[dex]);
-				}
+			return new Promise(delay => {
+				setTimeout(() => {
+					delay(addNewConnection(dbName))
+				}, 5);
 			});
-		});
-		return promise;
+		}
+		this.lock = true;
+		return new Promise(minidelay => {
+				setTimeout(() => {
+					minidelay(new Promise((resolve, reject) =>
+						{
+							var config = (process.env.DBPOOL != null)?JSON.parse(process.env.DBPOOL)[dbName]:require(__basedir + 'credentials/' + dbName + '.json');
+
+							try
+							{
+								mi._ibmdb.open(_buildConectionString(config)).then(conn => {
+									pool[dbName].counter++;
+									pool[dbName].connections.push({ _connection: conn, active: false, id: pool[dbName].counter });
+									var dex = _.findIndex(pool[dbName].connections, { id: pool[dbName].counter });
+									this.lock = false;
+									resolve(pool[dbName].connections[dex]);
+								}).catch(err => {
+									console.log(err);
+									this.lock = false;
+									reject(err);
+								});
+							}
+							catch(err)
+							{
+								console.log(err);
+								this.lock = false;
+								reject(err);
+							}
+						})
+					)
+				}, 1);
+			});
+
 	}
 
 	function _buildConectionString(json)
